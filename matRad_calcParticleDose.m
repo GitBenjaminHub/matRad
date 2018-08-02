@@ -434,6 +434,10 @@ for ShiftScen = 1:pln.multScen.totNumShiftScen
                             sigmaIni = matRad_interp1(machine.data(energyIx).initFocus.dist(stf(i).ray(j).focusIx(k),:)', ...
                                                       machine.data(energyIx).initFocus.sigma(stf(i).ray(j).focusIx(k),:)',stf(i).ray(j).SSD{ctScen});
                             sigmaIni_sq = sigmaIni^2;
+                            
+                            if isfield(stf(i).ray(j),'sigmaFactor')
+                                sigmaIni_sq = stf(i).ray(j).sigmaFactor(k)^2 * sigmaIni_sq;
+                            end
 
                             % consider range shifter for protons if applicable
                             if stf(i).ray(j).rangeShifter(k).eqThickness > 0 && strcmp(pln.radiationMode,'protons')
