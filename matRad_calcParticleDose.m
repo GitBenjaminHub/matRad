@@ -340,7 +340,7 @@ for ShiftScen = 1:pln.multScen.totNumShiftScen
                maxLateralCutoffDoseCalc = max(machine.data(energyIx).LatCutOff.CutOff);
 
                % Ray tracing for beam i and ray j
-               [ix,radialDist_sq] = matRad_calcGeoDists(rot_coordsV, ...
+               [ix,radialDist_sq,~,~,latDistX,latDistZ] = matRad_calcGeoDists(rot_coordsV, ...
                                                         stf(i).sourcePoint_bev, ...
                                                         stf(i).ray(j).targetPoint_bev, ...
                                                         machine.meta.SAD, ...
@@ -435,10 +435,6 @@ for ShiftScen = 1:pln.multScen.totNumShiftScen
                                                       machine.data(energyIx).initFocus.sigma(stf(i).ray(j).focusIx(k),:)',stf(i).ray(j).SSD{ctScen});
                             sigmaIni_sq = sigmaIni^2;
                             
-                            if isfield(stf(i).ray(j),'sigmaFactor')
-                                sigmaIni_sq = stf(i).ray(j).sigmaFactor(k)^2 * sigmaIni_sq;
-                            end
-
                             % consider range shifter for protons if applicable
                             if stf(i).ray(j).rangeShifter(k).eqThickness > 0 && strcmp(pln.radiationMode,'protons')
 
@@ -452,6 +448,11 @@ for ShiftScen = 1:pln.multScen.totNumShiftScen
 
                             end
 
+                            if isfield(stf(i).ray(j),'sigmaFactor')
+                                sigmaIni_sq = stf(i).ray(j).sigmaFactor.x(k)^2 * sigmaIni_sq;
+                                %sigmaIni_sq_z = stf(i).ray(j).sigmaFactor.z(k)^2 * sigmaIni_sq;
+                            end
+                            
                             % calculate particle dose for bixel k on ray j of beam i
                             bixelDose = matRad_calcParticleDoseBixel(...
                                 currRadDepths, ...

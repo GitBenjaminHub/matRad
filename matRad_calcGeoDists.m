@@ -1,4 +1,4 @@
-function [ix,rad_distancesSq,isoLatDistsX,isoLatDistsZ] = ...
+function [ix,rad_distancesSq,isoLatDistsX,isoLatDistsZ,latDistsX,latDistsZ] = ...
           matRad_calcGeoDists(rot_coords_bev, ...
                               sourcePoint_bev, ...
                               targetPoint_bev, ...
@@ -106,6 +106,11 @@ end
 if nargout > 2
    isoLatDistsX = latDistsX(subsetMask)./rot_coords_temp(subsetMask,2)*SAD;
    isoLatDistsZ = latDistsZ(subsetMask)./rot_coords_temp(subsetMask,2)*SAD; 
+end
+
+if nargout > 4
+   latDistsX = latDistsX(subsetMask);
+   latDistsZ = latDistsZ(subsetMask); 
 end
 
 
